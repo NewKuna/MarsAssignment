@@ -1,0 +1,9 @@
+# Default values for spring-boot.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+namespace: 'example'
+
+service:
+  scheme: HTTP
+  port: 8080

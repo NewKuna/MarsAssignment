@@ -1,0 +1,46 @@
+version: "3.9"
+services:
+  elasticsearch:
+    image: elasticsearch:8.8.0
+    environment:
+      - discovery.type=single-node
+#      - cluster.name=elasticsearch
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - xpack.security.enabled=false
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - target: 9200
+        published: 9200
+    networks:
+      - elastic
+
+#  kibana:
+#    image: kibana:8.8.0
+#    ports:
+#      - target: 5601
+#        published: 5601
+#    depends_on:
+#      - elasticsearch
+#    networks:
+#      - elastic
+
+  mars-assignment:
+    image: mars-assignment:dev
+    ports:
+      - target: 8080
+        published: 8080
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+    networks:
+      - elastic
+
+volumes:
+  es_data:
+    driver: local
+
+networks:
+  elastic:
+    name: elastic
+    driver: bridge
